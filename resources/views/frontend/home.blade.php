@@ -109,6 +109,11 @@ input[type=number] {
             
         </tbody>
     </table>
+ <div class="card-body">
+    @if(!empty($records))
+       {{$records->links()}}
+@endif
+ </div>
 
 </div>
 </div>
