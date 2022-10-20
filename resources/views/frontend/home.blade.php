@@ -56,7 +56,7 @@ input[type=number] {
      <div class="col-md-12 margin_content" >
         <div class="d-flex justify-content-between" >
             <h3 class="float-start">Stock Price ({{$records->total()}})</h3>
-            <button class="btn btn-success float-end  px-3" data-toggle="modal" data-target="#add_income_modal"><i class="fas fa-plus-circle me-2"></i>Get Price</button>
+            <button class="btn btn-success float-end  px-3" data-toggle="modal" data-target="#add_stock_price_modal"><i class="fas fa-plus-circle me-2"></i>Get Price</button>
 
 
             
@@ -117,12 +117,12 @@ input[type=number] {
 
 
 
-<div class="modal fade" id="add_income_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="add_stock_price_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
 
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Income</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add Stock Price</h5>
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
@@ -130,11 +130,11 @@ input[type=number] {
         
      <label for="" class="col-form-label">stock symbol</label>
      {!!Form::text('symbol','AMZN',array('class'=>'form-control','placeholder'=>'Enter stock symbol','autocomplete'=>'off','required','id'=>'symbol_id')) !!} 
-
+<span  class="text-danger errors"></span>
  </div>
  <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-success" data-dismiss="modal" id="getPrice">Get Price</button>
+    <button type="button" class="btn btn-success"  id="getPrice">Get Price</button>
 
 </div>
 
@@ -155,7 +155,13 @@ input[type=number] {
 <script type="text/javascript">
  $(document).ready(function() {
 
-// alert('getPrice')
+  $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+
 
 $("#getPrice").click(function(e){
 
@@ -165,15 +171,19 @@ $("#getPrice").click(function(e){
  var symbol=$("#symbol_id").val();
 
  var token = $("meta[name='csrf-token']").attr("content");
- 
+
+     $('#add_stock_price_modal').modal('toggle');
+
+
+// alert('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol='+symbol+'&apikey=0O18XUJW9P8QVGQJ')
+if (symbol) {
 
  $.ajax(
  {
     url:'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol='+symbol+'&apikey=0O18XUJW9P8QVGQJ',
-    type: 'get',
-    
+    type: 'GET',
     data: {
-        "_token": token,
+        _token: token,
     },
     dataType: 'html',
     success: function(data) {
@@ -200,8 +210,16 @@ $("#getPrice").click(function(e){
         function_new(symbol='AMZN',open='119.0600',high='119.5200',low='114.7900',price='116.3600',volume='65607448',day='2022-10-18',close='113.7900',change='2.5700',percent='2.2585');
 
         console.log('ERROR: ', data);
+
     },
 });
+
+}else{
+
+$(".errors").text('this field must be requird')
+
+
+}
 });
 
 

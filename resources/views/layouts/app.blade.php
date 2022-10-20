@@ -41,7 +41,7 @@
      
 
 
-     <script src="{{ asset('public/js/jquery-3.3.1.min.js')}}"></script>
+    <script src="https://code.jquery.com/jquery-3.4.0.js" integrity="sha256-DYZMCC8HTC+QDr5QNaIcfR7VSPtcISykd+6eSmBW5qo=" crossorigin="anonymous"></script>
      <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
      <script src="{{asset('public/js/toastr.min.js')}}"></script>
      <script src="{{ asset('public/sweetalert-master/dist/sweetalert.min.js') }}"></script>
