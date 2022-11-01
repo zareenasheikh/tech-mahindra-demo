@@ -50,12 +50,35 @@ class HomeController extends Controller
         'quote_latest_trading_day',
         'quote_previous_close',
         'quote_change',
-        'quote_change_percent')
+        'quote_change_percent','created_at')
        ->paginate(25);
 
 
 
        return view('frontend.home',compact('records'));
+
+   }
+
+
+
+  public function api_fetch_stock(Request $request)
+    {
+
+$symbol=$request->symbol;
+
+        $httpClient = new \GuzzleHttp\Client();
+
+// https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol='+symbol+'&apikey=0O18XUJW9P8QVGQJ
+        $request =
+            $httpClient
+                ->get("https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=".$symbol."&apikey=0O18XUJW9P8QVGQJ");
+
+
+
+        $response = json_decode($request->getBody()->getContents());
+
+        return $response;
+     
 
    }
 

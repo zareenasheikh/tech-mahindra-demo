@@ -32,6 +32,8 @@ Route::get('oauth/{driver}/callback', [App\Http\Controllers\Auth\LoginController
 Route::resource('category', App\Http\Controllers\HomeController::class);
 Route::post('/store_stock_quote', [App\Http\Controllers\HomeController::class, 'store_stock_quote'])->name('store_stock_quote');
 
+Route::post('/api_fetch_stock', [App\Http\Controllers\HomeController::class, 'api_fetch_stock'])->name('api_fetch_stock');
+
 
 Route::post('stock_quote/delete', [App\Http\Controllers\HomeController::class, 'destroy']);
 

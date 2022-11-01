@@ -86,7 +86,7 @@ input[type=number] {
              @foreach($records as $index=>$data)
              <tr class="deleteRow">
                 <th scope="row">{{$index+1}}</th>
-                <td class="m-auto" >{{date('d-m-Y',strtotime($data->craeted_at))}}</td>
+                <td class="m-auto" >{{date('d-m-Y',strtotime($data->created_at))}}</td>
                 <td class="m-auto" >{{ $data->quote_symbol }}</td>
                 <td class="m-auto" >{{ $data->quote_open }}</td>
                 <td class="m-auto" >{{ $data->quote_high }}</td>
@@ -175,22 +175,30 @@ $("#getPrice").click(function(e){
  var id = $(this).data("id");
  var symbol=$("#symbol_id").val();
 
- var token = $("meta[name='csrf-token']").attr("content");
+     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
      $('#add_stock_price_modal').modal('toggle');
 
 
-// alert('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol='+symbol+'&apikey=0O18XUJW9P8QVGQJ')
 if (symbol) {
 
  $.ajax(
  {
-    url:'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol='+symbol+'&apikey=0O18XUJW9P8QVGQJ',
-    type: 'GET',
-    data: {
-        _token: token,
-    },
-    dataType: 'html',
+    // url:'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol='+symbol+'&apikey=0O18XUJW9P8QVGQJ',
+    // type: 'GET',
+    // data: {
+    //     _token: token,
+    // },
+    // dataType: 'html',
+
+
+type:"POST",
+url:"{{route('api_fetch_stock')}}",
+data:{_token: CSRF_TOKEN, symbol:symbol},
+dataType:'JSON',
+
+
+
     success: function(data) {
         console.log('SUCCESS: ', data);
         if (data) {
