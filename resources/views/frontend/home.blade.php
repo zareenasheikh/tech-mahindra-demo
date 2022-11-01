@@ -53,7 +53,7 @@ input[type=number] {
     @include('layouts.header')
 
     <div class="row  mt-5">
-     <div class="col-md-12 margin_content" >
+       <div class="col-md-12 margin_content" >
         <div class="d-flex justify-content-between" >
             <h3 class="float-start">Stock Price ({{$records->total()}})</h3>
             <button class="btn btn-success float-end  px-3" data-toggle="modal" data-target="#add_stock_price_modal"><i class="fas fa-plus-circle me-2"></i>Get Price</button>
@@ -81,10 +81,10 @@ input[type=number] {
                 </tr>
             </thead>
             <tbody>
-             @if(!empty($records))
+               @if(!empty($records))
 
-             @foreach($records as $index=>$data)
-             <tr class="deleteRow">
+               @foreach($records as $index=>$data)
+               <tr class="deleteRow">
                 <th scope="row">{{$index+1}}</th>
                 <td class="m-auto" >{{date('d-m-Y',strtotime($data->created_at))}}</td>
                 <td class="m-auto" >{{ $data->quote_symbol }}</td>
@@ -98,7 +98,7 @@ input[type=number] {
                 <td class="m-auto" >{{ $data->quote_change }}</td>
                 <td class="m-auto" >{{ $data->quote_change_percent }}</td>
                 <td class="m-auto">
-                 
+                   
                     <button class="btn btn-outline-danger click_disbled" data="{{$data->id}}">
                         <i class="fas fa-trash-alt"></i>
                     </button>
@@ -109,11 +109,11 @@ input[type=number] {
             
         </tbody>
     </table>
- <div class="card-body">
-    @if(!empty($records))
-       {{$records->links()}}
-@endif
- </div>
+    <div class="card-body">
+        @if(!empty($records))
+        {{$records->links()}}
+        @endif
+    </div>
 
 </div>
 </div>
@@ -133,11 +133,11 @@ input[type=number] {
     <div class="modal-body">
       
         
-     <label for="" class="col-form-label">stock symbol</label>
-     {!!Form::text('symbol','AMZN',array('class'=>'form-control','placeholder'=>'Enter stock symbol','autocomplete'=>'off','required','id'=>'symbol_id')) !!} 
-<span  class="text-danger errors"></span>
- </div>
- <div class="modal-footer">
+       <label for="" class="col-form-label">stock symbol</label>
+       {!!Form::text('symbol','AMZN',array('class'=>'form-control','placeholder'=>'Enter stock symbol','autocomplete'=>'off','required','id'=>'symbol_id')) !!} 
+       <span  class="text-danger errors"></span>
+   </div>
+   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
     <button type="button" class="btn btn-success"  id="getPrice">Get Price</button>
 
@@ -158,9 +158,9 @@ input[type=number] {
 
 
 <script type="text/javascript">
- $(document).ready(function() {
+   $(document).ready(function() {
 
-  $.ajaxSetup({
+      $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
@@ -168,22 +168,22 @@ input[type=number] {
 
 
 
-$("#getPrice").click(function(e){
+      $("#getPrice").click(function(e){
 
- e.preventDefault();
- 
- var id = $(this).data("id");
- var symbol=$("#symbol_id").val();
+       e.preventDefault();
+       
+       var id = $(this).data("id");
+       var symbol=$("#symbol_id").val();
 
-     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+       var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
-     $('#add_stock_price_modal').modal('toggle');
+       $('#add_stock_price_modal').modal('toggle');
 
 
-if (symbol) {
+       if (symbol) {
 
- $.ajax(
- {
+           $.ajax(
+           {
     // url:'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol='+symbol+'&apikey=0O18XUJW9P8QVGQJ',
     // type: 'GET',
     // data: {
@@ -192,10 +192,10 @@ if (symbol) {
     // dataType: 'html',
 
 
-type:"POST",
-url:"{{route('api_fetch_stock')}}",
-data:{_token: CSRF_TOKEN, symbol:symbol},
-dataType:'JSON',
+    type:"POST",
+    url:"{{route('api_fetch_stock')}}",
+    data:{_token: CSRF_TOKEN, symbol:symbol},
+    dataType:'JSON',
 
 
 
@@ -220,90 +220,90 @@ dataType:'JSON',
     },
     error: function(data) {
 
-        function_new(symbol='AMZN',open='119.0600',high='119.5200',low='114.7900',price='116.3600',volume='65607448',day='2022-10-18',close='113.7900',change='2.5700',percent='2.2585');
+        // function_new(symbol='AMZN',open='119.0600',high='119.5200',low='114.7900',price='116.3600',volume='65607448',day='2022-10-18',close='113.7900',change='2.5700',percent='2.2585');
 
         console.log('ERROR: ', data);
 
     },
 });
 
-}else{
+       }else{
 
-$(".errors").text('this field must be requird')
+        $(".errors").text('this field must be requird')
 
 
-}
+    }
 });
 
 
-})
+  })
 
- function function_new(symbol=null,open=null,high=null,low=null,price=null,volume=null,day=null,close=null,change=null,percent=null){
+   function function_new(symbol=null,open=null,high=null,low=null,price=null,volume=null,day=null,close=null,change=null,percent=null){
 
-     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+       var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
-     $.ajaxSetup({
+       $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
 
-     $.ajax({
-         type:"POST",
+       $.ajax({
+           type:"POST",
 
-         url:"{{url('store_stock_quote')}}",
+           url:"{{url('store_stock_quote')}}",
 
-         data:{_token: CSRF_TOKEN, quote_symbol:symbol, quote_open:open, quote_high:high, quote_low:low, quote_price:price, quote_volume:volume, quote_latest_trading_day:day, quote_previous_close:close, quote_change:change, quote_change_percent:percent},
+           data:{_token: CSRF_TOKEN, quote_symbol:symbol, quote_open:open, quote_high:high, quote_low:low, quote_price:price, quote_volume:volume, quote_latest_trading_day:day, quote_previous_close:close, quote_change:change, quote_change_percent:percent},
 
-         dataType:'JSON',
-
-
-         complete: function(){
-           
-           window.location.reload();
+           dataType:'JSON',
 
 
-       }
+           complete: function(){
+             
+             window.location.reload();
 
 
-   });
-
- }
+         }
 
 
- $(".click_disbled").click(function(){
+     });
+
+   }
 
 
-     var data=$(this).attr('data');
-     var clickDisbled = $(this);
+   $(".click_disbled").click(function(){
 
 
-     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-     swal({
-      title: 'Are you sure?',
-      text: "You want to delete this record! ",
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-  },
-  function() {
-      $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-
-      $.ajax({
-         type:"POST",
-
-         url:"{{url('stock_quote/delete')}}",
-         data:{_token: CSRF_TOKEN, id:data},
-         dataType:'JSON',
+       var data=$(this).attr('data');
+       var clickDisbled = $(this);
 
 
-         complete: function(){
+       var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+       swal({
+          title: 'Are you sure?',
+          text: "You want to delete this record! ",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+      },
+      function() {
+          $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+          $.ajax({
+           type:"POST",
+
+           url:"{{url('stock_quote/delete')}}",
+           data:{_token: CSRF_TOKEN, id:data},
+           dataType:'JSON',
+
+
+           complete: function(){
              // window.location.reload();
 
              clickDisbled.parents('.deleteRow').fadeOut(1500);
@@ -318,8 +318,8 @@ $(".errors").text('this field must be requird')
 
 
      });
-  });
- });
+      });
+   });
 
 
 </script>
